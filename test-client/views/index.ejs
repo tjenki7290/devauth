@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DevAuth Test Client</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: #3B3B3B;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    
+    .container {
+      background: #2a2a2a;
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      border: 2px solid #A78BFA;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .logo {
+      font-size: 64px;
+      margin-bottom: 10px;
+    }
+    
+    h1 {
+      color: #ffffff;
+      margin-bottom: 10px;
+    }
+    
+    .subtitle {
+      color: #d1d5db;
+      font-size: 14px;
+    }
+    
+    .badge {
+      display: inline-block;
+      background: #A78BFA;
+      color: #3B3B3B;
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-size: 12px;
+      margin-top: 10px;
+      font-weight: 600;
+    }
+    
+    .login-section {
+      margin: 30px 0;
+    }
+    
+    .login-section h2 {
+      color: #ffffff;
+      margin-bottom: 20px;
+      font-size: 18px;
+    }
+    
+    .provider-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    .provider-btn {
+      display: flex;
+      align-items: center;
+      padding: 15px 20px;
+      border: 2px solid #4a4a4a;
+      border-radius: 10px;
+      text-decoration: none;
+      color: #d1d5db;
+      transition: all 0.3s;
+      font-size: 16px;
+      font-weight: 500;
+      background: #3B3B3B;
+    }
+    
+    .provider-btn:hover {
+      border-color: #A78BFA;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(167, 139, 250, 0.3);
+      background: rgba(167, 139, 250, 0.1);
+    }
+    
+    .provider-btn .icon {
+      font-size: 24px;
+      margin-right: 15px;
+    }
+    
+    .user-info {
+      background: #2a2a2a;
+      border-radius: 15px;
+      padding: 30px;
+      margin-bottom: 30px;
+      border: 2px solid #00F7FF;
+      box-shadow: 0 0 30px rgba(0, 247, 255, 0.2);
+    }
+    
+    .user-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #4a4a4a;
+    }
+    
+    .user-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      margin-right: 15px;
+      object-fit: cover;
+      border: 3px solid #00F7FF;
+    }
+    
+    .user-name {
+      flex: 1;
+    }
+    
+    .user-name h2 {
+      color: #ffffff;
+      margin-bottom: 5px;
+      font-size: 20px;
+    }
+    
+    .user-name p {
+      color: #A78BFA;
+      font-size: 14px;
+    }
+    
+    .success-badge {
+      background: #10b981;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 15px;
+      font-size: 12px;
+    }
+    
+    .user-details {
+      display: grid;
+      gap: 10px;
+    }
+    
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      background: #3B3B3B;
+      border-radius: 8px;
+      border: 1px solid #4a4a4a;
+    }
+    
+    .detail-label {
+      color: #A78BFA;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    
+    .detail-value {
+      color: #00F7FF;
+      font-weight: 500;
+      font-size: 14px;
+      max-width: 60%;
+      text-align: right;
+      word-break: break-all;
+    }
+    
+    .logout-btn {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      background: #ef4444;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-align: center;
+      text-decoration: none;
+      margin-top: 20px;
+    }
+    
+    .logout-btn:hover {
+      background: #dc2626;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(239, 68, 68, 0.3);
+    }
+    
+    .info-box {
+      background: rgba(167, 139, 250, 0.1);
+      border-left: 4px solid #A78BFA;
+      padding: 15px;
+      border-radius: 5px;
+      margin-top: 20px;
+    }
+    
+    .info-box p {
+      margin: 5px 0;
+      color: #d1d5db;
+      font-size: 14px;
+    }
+    
+    .info-box code {
+      background: #3B3B3B;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 12px;
+      color: #00F7FF;
+    }
+    
+    .info-box a {
+      color: #00F7FF;
+    }
+    
+    .info-box a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">🧪</div>
+      <h1>DevAuth Test Client</h1>
+      <p class="subtitle">Testing OAuth 2.0 Flow with Mock Providers</p>
+      <span class="badge">DEMO APPLICATION</span>
+    </div>
+
+    <% if (userData) { %>
+      <!-- Logged In State -->
+      <div class="user-info">
+        <div class="user-header">
+          <img src="<%= userData.userInfo.picture || userData.userInfo.avatar_url || 'https://via.placeholder.com/60' %>" 
+               alt="Avatar" 
+               class="user-avatar">
+          <div class="user-name">
+            <h2><%= userData.userInfo.name || userData.userInfo.displayName || userData.userInfo.login %></h2>
+            <p><%= userData.userInfo.email || userData.userInfo.mail || userData.userInfo.userPrincipalName %></p>
+          </div>
+          <span class="success-badge">✓ Authenticated</span>
+        </div>
+
+        <div class="user-details">
+          <div class="detail-row">
+            <span class="detail-label">Provider:</span>
+            <span class="detail-value"><%= userData.provider %></span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Login Time:</span>
+            <span class="detail-value"><%= new Date(userData.loginTime).toLocaleString() %></span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Token Expires In:</span>
+            <span class="detail-value"><%= userData.expiresIn %> seconds</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label"><%= userData.authType === 'cookie' ? 'Session ID:' : 'Access Token:' %></span>
+            <span class="detail-value" style="font-family: monospace; font-size: 11px;">
+              <%= (userData.accessToken || userData.sessionId || 'N/A').substring(0, 30) %>...
+            </span>
+          </div>
+          <% if (userData.authType) { %>
+          <div class="detail-row">
+            <span class="detail-label">Auth Type:</span>
+            <span class="detail-value"><%= userData.authType === 'cookie' ? '🍪 Cookie-Based' : '🎫 JWT-Based' %></span>
+          </div>
+          <% } %>
+        </div>
+
+        <form action="/logout" method="GET">
+          <button type="submit" class="logout-btn">Logout</button>
+        </form>
+      </div>
+
+      <div class="info-box">
+        <p><strong>✅ OAuth Flow Completed Successfully!</strong></p>
+        <p>Your test app successfully authenticated with the mock <%= userData.provider %> provider.</p>
+      </div>
+
+    <% } else { %>
+      <!-- Logged Out State -->
+      <div class="login-section">
+        <h2>Sign in with Mock OAuth Provider</h2>
+        <div class="provider-buttons">
+          <a href="/login/google" class="provider-btn">
+            <span class="icon">🔵</span>
+            <span>Continue with Google</span>
+          </a>
+          
+          <a href="/login/github" class="provider-btn">
+            <span class="icon">⚫</span>
+            <span>Continue with GitHub</span>
+          </a>
+          
+          <a href="/login/microsoft" class="provider-btn">
+            <span class="icon">🔷</span>
+            <span>Continue with Microsoft</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <p><strong>🆚 Want to compare Cookie vs JWT auth?</strong></p>
+        <p>
+          <a href="/compare" style="color: #667eea; font-weight: 600; text-decoration: none;">View Side-by-Side Comparison →</a>
+          <br>
+          <a href="/live-compare" style="color: #667eea; font-weight: 600; text-decoration: none;">🔬 Watch Live Split-Screen Demo →</a>
+        </p>
+      </div>
+
+      <div class="info-box">
+        <p><strong>ℹ️ How this works:</strong></p>
+        <p>1. Click a provider button above</p>
+        <p>2. You'll be redirected to the mock OAuth login page</p>
+        <p>3. Click "Allow" to complete authentication</p>
+        <p>4. You'll be redirected back here with user info</p>
+        <br>
+        <p><strong>OAuth Server:</strong> <code style="color: #667eea; font-weight: 600; text-decoration: none;"><%= oauthServer %></code></p>
+        <p><strong>Client ID:</strong> <code style="color: #667eea; font-weight: 600; text-decoration: none;"><%= clientId %></code></p>
+        <p><strong>Callback URL:</strong> <code style="color: #667eea; font-weight: 600; text-decoration: none;"><%= callbackUrl %></code></p>
+      </div>
+    <% } %>
+  </div>
+</body>
+</html>
