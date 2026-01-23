@@ -291,6 +291,5 @@ app.get('/logout', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`🧪 Test Client running on http://localhost:${PORT}`);
-  console.log(`📝 Make sure DevAuth OAuth server is running on ${process.env.OAUTH_SERVER}`);
+  console.log(`🧪 Test Client running on port ${PORT}`);
 });
