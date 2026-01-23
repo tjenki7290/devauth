@@ -4,7 +4,8 @@ import axios from 'axios';
 import { io } from 'socket.io-client';
 import './App.css';
 
-const API_BASE = 'http://localhost:3000';
+const API_BASE = import.meta.env.VITE_API_BASE;
+const TEST_CLIENT_BASE = import.meta.env.VITE_TEST_CLIENT_BASE;
 
 function App() {
   const [providers, setProviders] = useState([]);
@@ -228,7 +229,7 @@ function App() {
   };
 
   const getAuthUrl = () => {
-    return `${API_BASE}/auth/${selectedProvider}/authorize?client_id=my_test_app&redirect_uri=http://localhost:8080/callback&scope=email%20profile&state=random123`;
+    return `${API_BASE}/auth/${selectedProvider}/authorize?client_id=my_test_app&redirect_uri=${TEST_CLIENT_BASE}/callback&scope=email%20profile&state=random123`;
   };
 
   const getTokenUrl = () => {
@@ -379,10 +380,12 @@ function App() {
                   <div className="url-item">
                     <label>Test Client Authorization URL</label>
                     <div className="url-box">
-                      <code style={{fontSize: '0.7rem'}}>{`http://localhost:8080/login/${selectedProvider}`}</code>
+                      <code style={{ fontSize: '0.7rem' }}>
+                        {`${TEST_CLIENT_BASE}/login/${selectedProvider}`}
+                      </code>
                       <button 
                         className="copy-btn"
-                        onClick={() => copyToClipboard(`http://localhost:8080/login/${selectedProvider}`, 'test-auth')}
+                        onClick={() => copyToClipboard(`${TEST_CLIENT_BASE}/login/${selectedProvider}`, 'test-auth')}
                         title="Copy URL"
                       >
                         {copied === 'test-auth' ? <Check size={16} /> : <Copy size={16} />}
@@ -397,8 +400,8 @@ function App() {
                 <div className="test-app-link">
                   <p>
                     <strong>🧪 Best way to test:</strong> Go to{' '}
-                    <a href="http://localhost:8080" target="_blank" rel="noopener noreferrer">
-                      Test Client (localhost:8080)
+                    <a href={TEST_CLIENT_BASE} target="_blank" rel="noopener noreferrer">
+                      Test Client
                     </a>
                     {' '}and click a provider button to see the full OAuth flow!
                   </p>
