@@ -39,8 +39,11 @@ function App() {
     fetchFailureModes();
     
     // Setup WebSocket connection
-    const newSocket = io(API_BASE);
-    
+    const newSocket = io(API_BASE, {
+      path: '/socket.io',
+      transports: ['websocket'],
+      withCredentials: true,
+    });    
     newSocket.on('connect', () => {
       console.log('✅ Connected to WebSocket');
       addLog('Connected to OAuth server', 'success');
