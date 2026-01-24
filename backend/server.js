@@ -10,66 +10,102 @@ const configRoutes = require('./routes/config');
 const authCookieRoutes = require('./routes/authCookie');
 
 const app = express();
+
+/**
+ * IMPORTANT for Render + secure cookies + WebSockets
+ */
 app.set('trust proxy', 1);
 
-/* 🔑 ALLOWED ORIGINS */
+const server = http.createServer(app);
+
+/**
+ * ✅ ALLOWED ORIGINS (MUST MATCH EXACTLY)
+ */
 const allowedOrigins = [
   'https://devauth-frontend.onrender.com',
-  'https://devauth-test-client.onrender.com'
+  'https://devauth-test-client.onrender.com',
 ];
 
-/* 🔑 EXPRESS CORS (MUST BE FIRST) */
+/**
+ * ✅ SOCKET.IO (WebSocket only — no polling)
+ */
+const io = new Server(server, {
+  path: '/socket.io',
+  transports: ['websocket'],
+  cors: {
+    origin: allowedOrigins,
+    credentials: true,
+  },
+});
+
+/**
+ * Make io accessible in routes
+ */
+app.set('io', io);
+
+/**
+ * ✅ EXPRESS CORS (for REST endpoints)
+ */
 app.use(cors({
-  origin: (origin, callback) => {
+  origin(origin, callback) {
+    // Allow server-to-server / curl
     if (!origin) return callback(null, true);
+
     if (allowedOrigins.includes(origin)) {
       return callback(null, true);
     }
-    callback(new Error('Not allowed by CORS'));
+
+    return callback(new Error(`CORS blocked: ${origin}`));
   },
-  credentials: true
+  credentials: true,
 }));
 
+/**
+ * Middleware
+ */
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-/* 🔑 ROUTES */
+/**
+ * Routes
+ */
 app.use('/auth', authRoutes);
 app.use('/auth-cookie', authCookieRoutes);
 app.use('/config', configRoutes);
 
-/* 🔑 HEALTH CHECK */
+/**
+ * Health check
+ */
 app.get('/', (req, res) => {
   res.json({
     message: 'DevAuth Mock OAuth Server',
-    status: 'running'
+    status: 'running',
+    endpoints: {
+      authorize: '/auth/:provider/authorize',
+      token: '/auth/:provider/token',
+      userinfo: '/auth/:provider/userinfo',
+      config: '/config/providers',
+    },
   });
 });
 
-/* 🔑 HTTP SERVER */
-const server = http.createServer(app);
-
-/* 🔑 SOCKET.IO */
-const io = new Server(server, {
-  path: '/socket.io',
-  cors: {
-    origin: allowedOrigins,
-    credentials: true
-  }
-});
-
-app.set('io', io);
-
+/**
+ * WebSocket handling
+ */
 io.on('connection', (socket) => {
   console.log('👁️ Dashboard connected:', socket.id);
+
   socket.on('disconnect', () => {
     console.log('👋 Dashboard disconnected:', socket.id);
   });
 });
 
-/* 🔑 LISTEN */
+/**
+ * Start server
+ */
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
   console.log(`🚀 DevAuth server running on port ${PORT}`);
+  console.log(`🔌 WebSocket server ready`);
 });
