@@ -12,30 +12,43 @@ const app = express();
 //deployment --- Because Render runs behind a proxy, cookies marked secure: true will not work without this.
 app.set('trust proxy', 1);
 const server = http.createServer(app);
+
 const io = new Server(server, {
-  cors: {    
+  cors: {
     origin: [
-    'https://devauth-frontend.onrender.com',
-    'https://devauth-test-client.onrender.com'
-  ],
+      'https://devauth-frontend.onrender.com',
+      'https://devauth-test-client.onrender.com'
+    ],
     methods: ['GET', 'POST'],
     credentials: true
   }
 });
+
 
 const PORT = process.env.PORT || 3000;
 
 // Make io accessible to routes
 app.set('io', io);
 
-// Middleware
+const allowedOrigins = [
+  'https://devauth-frontend.onrender.com',
+  'https://devauth-test-client.onrender.com'
+];
+
 app.use(cors({
-  origin: [
-    'https://devauth-frontend.onrender.com',
-    'https://devauth-test-client.onrender.com'
-  ],
+  origin: function (origin, callback) {
+    // allow server-to-server & curl requests
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
