@@ -365,23 +365,23 @@ function App() {
               onClick={() => setIsQuickTestUrlsOpen(!isQuickTestUrlsOpen)}
               className="w-full flex items-center justify-between p-0 bg-transparent border-0 cursor-pointer hover:opacity-80 transition-opacity"
             >
-              <h2>🧪 Quick Test URLs</h2>
+              <h2>🧪 IMPORTANT: TEST CLIENT URL</h2>
               {isQuickTestUrlsOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
             </button>
             
             {isQuickTestUrlsOpen && (
               <div className="mt-4">
                 <div className="info-box" style={{background: '#fff3cd', borderColor: '#ffc107'}}>
-                  <p style={{color: '#856404'}}><strong>⚠️ For Development Only:</strong></p>
-                  <p style={{color: '#856404'}}>These URLs work with the test client. In production, your app should generate its own state parameter for security.</p>
+                  <p style={{color: '#856404'}}><strong>For production:</strong></p>
+                  <p style={{color: '#856404'}}>This URL will direct you to the test-client which will mimic an OAuth page.</p>
                 </div>
 
                 <div className="url-list">
                   <div className="url-item">
-                    <label>Test Client Authorization URL</label>
+                    <label>Test Client URL</label>
                     <div className="url-box">
                       <code style={{ fontSize: '0.7rem' }}>
-                        {`${TEST_CLIENT_BASE}/login/${selectedProvider}`}
+                        {`https://devauth-test-client.onrender.com`}
                       </code>
                       <button 
                         className="copy-btn"
@@ -392,19 +392,9 @@ function App() {
                       </button>
                     </div>
                     <p style={{fontSize: '0.8rem', color: '#666', marginTop: '0.5rem'}}>
-                      Opens test client and initiates OAuth flow with proper state handling
+                      Opens test client to landing page, choose your provider to proceed.
                     </p>
                   </div>
-                </div>
-
-                <div className="test-app-link">
-                  <p>
-                    <strong>🧪 Best way to test:</strong> Go to{' '}
-                    <a href={TEST_CLIENT_BASE} target="_blank" rel="noopener noreferrer">
-                      Test Client
-                    </a>
-                    {' '}and click a provider button to see the full OAuth flow!
-                  </p>
                 </div>
               </div>
             )}
