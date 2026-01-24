@@ -31,8 +31,8 @@ app.set('io', io);
 // Middleware
 app.use(cors({
   origin: [
-    process.env.FRONTEND_URL,
-    process.env.TEST_CLIENT_URL
+    'https://devauth-frontend.onrender.com',
+    'https://devauth-test-client.onrender.com'
   ],
   credentials: true
 }));
