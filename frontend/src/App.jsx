@@ -38,12 +38,12 @@ function App() {
     fetchProviders();
     fetchFailureModes();
     
-    // Setup WebSocket connection
     const newSocket = io(API_BASE, {
       path: '/socket.io',
-      transports: ['websocket'],
+      transports: ['websocket', 'polling'],
       withCredentials: true,
-    });    
+    });
+       
     newSocket.on('connect', () => {
       console.log('✅ Connected to WebSocket');
       addLog('Connected to OAuth server', 'success');
