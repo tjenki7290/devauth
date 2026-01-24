@@ -23,7 +23,7 @@ const ALLOWED_ORIGINS = [
 ];
 
 app.use(cors({
-  origin: ALLOWED_ORIGINS,
+  origin: '*',
   credentials: true
 }));
 
@@ -57,7 +57,7 @@ app.get('/', (req, res) => {
 const io = new Server(server, {
   path: '/socket.io',
   cors: {
-    origin: ALLOWED_ORIGINS,
+    origin: '*',
     credentials: true
   }
 });
