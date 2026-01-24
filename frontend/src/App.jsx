@@ -385,7 +385,7 @@ function App() {
                       </code>
                       <button 
                         className="copy-btn"
-                        onClick={() => copyToClipboard(`${TEST_CLIENT_BASE}/login/${selectedProvider}`, 'test-auth')}
+                        onClick={() => copyToClipboard(`https://devauth-test-client.onrender.com`, 'test-auth')}
                         title="Copy URL"
                       >
                         {copied === 'test-auth' ? <Check size={16} /> : <Copy size={16} />}
