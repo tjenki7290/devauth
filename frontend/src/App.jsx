@@ -39,9 +39,7 @@ function App() {
     fetchFailureModes();
     
     const newSocket = io(API_BASE, {
-      path: '/socket.io',
-      transports: ['websocket', 'polling'],
-      withCredentials: true,
+      transports: ['polling'], // Render Free friendly
     });
        
     newSocket.on('connect', () => {

@@ -10,60 +10,59 @@ const configRoutes = require('./routes/config');
 const authCookieRoutes = require('./routes/authCookie');
 
 const app = express();
+
+// Required for Render cookies + proxies
 app.set('trust proxy', 1);
 
 const server = http.createServer(app);
 
-/* =========================
-   ✅ CORS — HTTP (FIXED)
-   ========================= */
+// ✅ Allowed origins
 const ALLOWED_ORIGINS = [
   'https://devauth-frontend.onrender.com',
-  'https://devauth-test-client.onrender.com'
+  'https://devauth-test-client.onrender.com',
 ];
 
+// ✅ Express CORS (REST endpoints)
 app.use(cors({
-  origin: '*',
-  credentials: true
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true); // allow curl / server calls
+    if (ALLOWED_ORIGINS.includes(origin)) return callback(null, true);
+    return callback(new Error('CORS blocked'));
+  },
+  credentials: true,
 }));
 
-/* =========================
-   Middleware
-   ========================= */
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-/* =========================
-   Routes
-   ========================= */
+// ✅ Socket.IO CORS (THIS was the missing piece)
+const io = new Server(server, {
+  path: '/socket.io',
+  cors: {
+    origin: ALLOWED_ORIGINS,
+    methods: ['GET', 'POST'],
+    credentials: true,
+  },
+});
+
+// Make io available to routes
+app.set('io', io);
+
+// Routes
 app.use('/auth', authRoutes);
 app.use('/auth-cookie', authCookieRoutes);
 app.use('/config', configRoutes);
 
-/* =========================
-   Health Check
-   ========================= */
+// Health check
 app.get('/', (req, res) => {
   res.json({
     message: 'DevAuth Mock OAuth Server',
-    status: 'running'
+    status: 'running',
   });
 });
 
-/* =========================
-   ✅ Socket.IO (FIXED)
-   ========================= */
-const io = new Server(server, {
-  path: '/socket.io',
-  cors: {
-    origin: '*',
-    credentials: true
-  }
-});
-
-app.set('io', io);
-
+// Socket events
 io.on('connection', (socket) => {
   console.log('👁️ Dashboard connected:', socket.id);
 
@@ -72,10 +71,7 @@ io.on('connection', (socket) => {
   });
 });
 
-/* =========================
-   Start Server
-   ========================= */
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-  console.log(`🚀 DevAuth server running on port ${PORT}`);
+  console.log(`🚀 DevAuth backend running on ${PORT}`);
 });
