@@ -15,8 +15,8 @@ const server = http.createServer(app);
 const io = new Server(server, {
   cors: {    
     origin: [
-    process.env.FRONTEND_URL,
-    process.env.TEST_CLIENT_URL
+    'https://devauth-frontend.onrender.com',
+    'https://devauth-test-client.onrender.com'
   ],
     methods: ['GET', 'POST'],
     credentials: true
