@@ -289,7 +289,7 @@ function App() {
             </div>
           </div>
 
-          <div className="section">
+          {/* <div className="section">
             <button
               onClick={() => setIsIntegrationGuideOpen(!isIntegrationGuideOpen)}
               className="w-full flex items-center justify-between p-0 bg-transparent border-0 cursor-pointer hover:opacity-80 transition-opacity"
@@ -359,7 +359,7 @@ function App() {
                 </div>
               </div>
             )}
-          </div>
+          </div> */}
 
           <div className="section">
             <button
@@ -472,7 +472,8 @@ function App() {
               <div className="mt-4">
                 <div className="info-box" style={{background: '#fff3cd', borderColor: '#ffc107', marginBottom: '1.5rem'}}>
                   <p style={{color: '#856404'}}><strong>🧪 Test Error Handling:</strong></p>
-                  <p style={{color: '#856404'}}>Enable these modes to simulate OAuth failures and see how your app handles errors.</p>
+                  <p style={{color: '#856404'}}>Enable these modes to simulate OAuth failures and see how your app handles errors.
+                  Test it: toggle one of the error modes then go to the test client and try and allow access.</p>
                 </div>
 
                 <div className="failure-modes">
