@@ -18,17 +18,14 @@ const server = http.createServer(app);
 
 // ✅ Allowed origins
 const ALLOWED_ORIGINS = [
-  'https://devauth-frontend.onrender.com',
-  'https://devauth-test-client.onrender.com',
+  '*'
+  // 'https://devauth-frontend.onrender.com',
+  // 'https://devauth-test-client.onrender.com',
 ];
 
 // ✅ Express CORS (REST endpoints)
 app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin) return callback(null, true); // allow curl / server calls
-    if (ALLOWED_ORIGINS.includes(origin)) return callback(null, true);
-    return callback(new Error('CORS blocked'));
-  },
+  origin: true,
   credentials: true,
 }));
 
@@ -36,11 +33,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// ✅ Socket.IO CORS (THIS was the missing piece)
+// ✅ Socket.IO CORS
 const io = new Server(server, {
   path: '/socket.io',
   cors: {
-    origin: ALLOWED_ORIGINS,
+    origin: true,
     methods: ['GET', 'POST'],
     credentials: true,
   },
